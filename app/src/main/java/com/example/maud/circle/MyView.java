@@ -35,18 +35,18 @@ public class MyView extends View
         canvas.drawCircle(x, y, rad, paint);
     }
 
-    void getPoints(){
-       //read the arraylist with slice
-        pointsFromPhone new ArrayList<>(10);
-        String element1X = pointsFromPhone.get(2);
-
-    }
-
-    getOrientation(){
-
-    }
-
-    turnPoints(){
-
-    }
+//    void getPoints(){
+//       //read the arraylist with slice
+//        pointsFromPhone new ArrayList<>(10);
+//        String element1X = pointsFromPhone.get(2);
+//
+//    }
+//
+//    getOrientation(){
+//
+//    }
+//
+//    turnPoints(){
+//
+//    }
 }
