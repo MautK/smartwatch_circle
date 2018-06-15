@@ -6,9 +6,13 @@ import android.graphics.Color;
 import android.graphics.Paint;
 import android.view.View;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class MyView extends View
 {
     private Paint paint;
+     List<String> pointsFromPhone;
 
     public MyView(Context context)
     {
@@ -31,7 +35,18 @@ public class MyView extends View
         canvas.drawCircle(x, y, rad, paint);
     }
 
-    void setPoints(){
+    void getPoints(){
+       //read the arraylist with slice
+        pointsFromPhone new ArrayList<>(10);
+        String element1X = pointsFromPhone.get(2);
+
+    }
+
+    getOrientation(){
+
+    }
+
+    turnPoints(){
 
     }
 }
