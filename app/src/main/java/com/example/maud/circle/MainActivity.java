@@ -20,6 +20,7 @@ public class MainActivity extends WearableActivity {
     private TextView mTextView;
     private MyView mMyView;
     private SensorManager mSensorManager;
+    private Sensor mMagneticSensor;
 
     @SuppressLint("WrongViewCast")
     @Override
@@ -27,16 +28,21 @@ public class MainActivity extends WearableActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        //this has changed, we create a new view from the class here
         setContentView(new MyView(this));
 
         // Enables Always-on
         setAmbientEnabled();
 
         mSensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
+        mMagneticSensor = mSensorManager.getDefaultSensor(Sensor.TYPE_MAGNETIC_FIELD)
+
+                //to get all the different sensor types
         final List<Sensor> deviceSensors = mSensorManager.getSensorList(Sensor.TYPE_ALL);
         for(Sensor type : deviceSensors){
             Log.e("sensors",type.getStringType());
+            //geomagnetic sensor used for users orientation (if accelerometer is not present)
+            //returns x,y,z for each sensor event
+
         }
     }
 
