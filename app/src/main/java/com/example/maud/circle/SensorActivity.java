@@ -53,8 +53,8 @@ public class SensorActivity extends Activity implements SensorEventListener {
             // https://www.youtube.com/watch?v=nOQxq2YpEjQ
             compass = (int) (Math.toDegrees(SensorManager.getOrientation(rMat, orientation)[0]+360)%360);
             //display data
-            setData(event.values[0], event.values[1], event.values[2]);
-
+            SensorData newSensorData = new SensorData();
+            newSensorData.setData(event.values[0], event.values[1], event.values[2]);
         }
     }
 
@@ -68,5 +68,9 @@ public class SensorActivity extends Activity implements SensorEventListener {
         x = newX;
         y = newY;
         z = newZ;
+    }
+    
+    void logSomething(){
+        Log.d(TAG, "logSomething: hello");
     }
 }

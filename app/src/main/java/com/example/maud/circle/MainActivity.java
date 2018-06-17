@@ -36,6 +36,7 @@ public class MainActivity extends WearableActivity {
         mRotation = mSensorManager.getDefaultSensor(Sensor.TYPE_ROTATION_VECTOR);
 
         SensorActivity mSensorActivity = new SensorActivity();
+        mSensorActivity.logSomething();
     }
 
 }
