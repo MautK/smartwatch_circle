@@ -3,6 +3,8 @@ package com.example.maud.circle;
 import android.Manifest;
 import android.annotation.SuppressLint;
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.app.usage.UsageEvents;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.graphics.Canvas;
@@ -18,6 +20,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
 
+import java.util.EventListener;
 import java.util.List;
 
 public class MainActivity extends WearableActivity {
@@ -27,6 +30,8 @@ public class MainActivity extends WearableActivity {
     public SensorManager mSensorManager;
     private Sensor mGyroscope;
     private Sensor mMagnetometer;
+    private SensorActivity mSensorActivity;
+    private EventListener mEvent;
 
     @SuppressLint("WrongViewCast")
     @Override
@@ -41,13 +46,8 @@ public class MainActivity extends WearableActivity {
         mGyroscope = mSensorManager.getDefaultSensor(Sensor.TYPE_GYROSCOPE);
         //do we have this one the smartwatch?
         mMagnetometer = mSensorManager.getDefaultSensor(Sensor.TYPE_MAGNETIC_FIELD);
-        if (mSensorManager.getDefaultSensor(Sensor.TYPE_GYROSCOPE) != null){
-            // Success! There's a gyroscope.
-            // action
-        }
-        else {
-            // Failure! No gyroscope.
-        }
+
+
 
         //to get all the different sensor types
         final List<Sensor> deviceSensors = mSensorManager.getSensorList(Sensor.TYPE_ALL);
@@ -60,4 +60,5 @@ public class MainActivity extends WearableActivity {
 
         }
     }
+
 }

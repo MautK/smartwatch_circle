@@ -10,6 +10,9 @@ public class SensorActivity extends Activity implements SensorEventListener {
 
     public SensorManager mSensorManager;
     private Sensor mMagneticSensor;
+    int compass;
+    float [] rMat = new float[9];
+    float [] orientation = new float[9];
 
     @Override
     protected void onResume(){
@@ -26,9 +29,14 @@ public class SensorActivity extends Activity implements SensorEventListener {
     //as little action as possible within this function
     @Override
     public void onSensorChanged(SensorEvent event) {
-        //check which value of the gyroscope we need
-        // need x and y
-        float xCompass = event.values[0];
+        //check first which sensor is getting data
+        if(event.sensor.getType() == Sensor.TYPE_GYROSCOPE){
+            //store data in matrix
+            SensorManager.getRotationMatrixFromVector(rMat, event.values);
+            // some math calculations from this video
+            // https://www.youtube.com/watch?v=nOQxq2YpEjQ
+            compass = (int) (Math.toDegrees(SensorManager.getOrientation(rMat, orientation)[0]+360)%360);
+        }
     }
 
     @Override
