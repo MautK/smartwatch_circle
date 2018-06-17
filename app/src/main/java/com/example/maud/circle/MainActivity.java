@@ -1,13 +1,18 @@
 package com.example.maud.circle;
 
+import android.Manifest;
 import android.annotation.SuppressLint;
+import android.app.Activity;
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.hardware.Sensor;
+import android.hardware.SensorEvent;
 import android.hardware.SensorManager;
 import android.os.Bundle;
+import android.support.v4.content.ContextCompat;
 import android.support.wearable.activity.WearableActivity;
 import android.util.Log;
 import android.view.View;
@@ -34,21 +39,17 @@ public class MainActivity extends WearableActivity {
         setAmbientEnabled();
 
         mSensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
-        mMagneticSensor = mSensorManager.getDefaultSensor(Sensor.TYPE_MAGNETIC_FIELD)
+        mMagneticSensor = mSensorManager.getDefaultSensor(Sensor.TYPE_MAGNETIC_FIELD);
 
-                //to get all the different sensor types
+        //to get all the different sensor types
         final List<Sensor> deviceSensors = mSensorManager.getSensorList(Sensor.TYPE_ALL);
-        for(Sensor type : deviceSensors){
-            Log.e("sensors",type.getStringType());
+        for (Sensor type : deviceSensors) {
+            Log.e("sensors", type.getStringType());
             //geomagnetic sensor used for users orientation (if accelerometer is not present)
             //returns x,y,z for each sensor event
+            //rotational vector sensor is ideal for compasses
+
 
         }
     }
-
-
-
-
-
-
 }
