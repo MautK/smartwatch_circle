@@ -25,7 +25,8 @@ public class MainActivity extends WearableActivity {
     private TextView mTextView;
     private MyView mMyView;
     public SensorManager mSensorManager;
-    private Sensor mMagneticSensor;
+    private Sensor mGyroscope;
+    private Sensor mMagnetometer;
 
     @SuppressLint("WrongViewCast")
     @Override
@@ -37,7 +38,9 @@ public class MainActivity extends WearableActivity {
 
 
         mSensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
-        mMagneticSensor = mSensorManager.getDefaultSensor(Sensor.TYPE_GYROSCOPE);
+        mGyroscope = mSensorManager.getDefaultSensor(Sensor.TYPE_GYROSCOPE);
+        //do we have this one the smartwatch?
+        mMagnetometer = mSensorManager.getDefaultSensor(Sensor.TYPE_MAGNETIC_FIELD);
         if (mSensorManager.getDefaultSensor(Sensor.TYPE_GYROSCOPE) != null){
             // Success! There's a gyroscope.
             // action
