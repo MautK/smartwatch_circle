@@ -24,7 +24,7 @@ public class MainActivity extends WearableActivity {
 
     private TextView mTextView;
     private MyView mMyView;
-    private SensorManager mSensorManager;
+    public SensorManager mSensorManager;
     private Sensor mMagneticSensor;
 
     @SuppressLint("WrongViewCast")
@@ -35,11 +35,16 @@ public class MainActivity extends WearableActivity {
 
         setContentView(new MyView(this));
 
-        // Enables Always-on
-        setAmbientEnabled();
 
         mSensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
-        mMagneticSensor = mSensorManager.getDefaultSensor(Sensor.TYPE_MAGNETIC_FIELD);
+        mMagneticSensor = mSensorManager.getDefaultSensor(Sensor.TYPE_GYROSCOPE);
+        if (mSensorManager.getDefaultSensor(Sensor.TYPE_GYROSCOPE) != null){
+            // Success! There's a gyroscope.
+            // action
+        }
+        else {
+            // Failure! No gyroscope.
+        }
 
         //to get all the different sensor types
         final List<Sensor> deviceSensors = mSensorManager.getSensorList(Sensor.TYPE_ALL);
