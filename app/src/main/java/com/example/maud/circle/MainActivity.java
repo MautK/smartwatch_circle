@@ -23,8 +23,10 @@ public class MainActivity extends WearableActivity implements SensorEventListene
     public Sensor mMagnetometer;
     public Sensor mRotation;
     public Sensor mMagneticRotationVector;
-//    private SensorActivity mSensorActivity;
-//    private EventListener mEvent;
+    public Sensor mAccelerometer;
+
+    public float[] mGravity;
+    public float[] mMagneticRotationData;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,13 +39,8 @@ public class MainActivity extends WearableActivity implements SensorEventListene
         mGyroscope = mSensorManager.getDefaultSensor(Sensor.TYPE_GYROSCOPE);
         mRotation = mSensorManager.getDefaultSensor(Sensor.TYPE_ROTATION_VECTOR);
         mMagneticRotationVector = mSensorManager.getDefaultSensor(Sensor.TYPE_GEOMAGNETIC_ROTATION_VECTOR);
+        mAccelerometer = mSensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
 
-        List<Sensor> sensors = mSensorManager.getSensorList(Sensor.TYPE_ALL);
-        for (Sensor sensor : sensors) {
-            Log.d("Sensors", "" + sensor.getName());
-        }
-
-//        mSensorActivity = new SensorActivity();
     }
 
     @Override
@@ -56,7 +53,7 @@ public class MainActivity extends WearableActivity implements SensorEventListene
         mSensorManager.registerListener(this, mGyroscope, SensorManager.SENSOR_DELAY_NORMAL);
         mSensorManager.registerListener(this, mRotation, SensorManager.SENSOR_DELAY_NORMAL);
         mSensorManager.registerListener(this, mMagneticRotationVector, SensorManager.SENSOR_DELAY_NORMAL);
-
+        mSensorManager.registerListener(this, mAccelerometer, SensorManager.SENSOR_DELAY_NORMAL);
     }
 
 
@@ -74,13 +71,6 @@ public class MainActivity extends WearableActivity implements SensorEventListene
     @Override
     //as little action as possible within this function
     public void onSensorChanged(SensorEvent event) {
-        //check first which sensor is getting data
-        if (event.sensor.getType() == Sensor.TYPE_ROTATION_VECTOR) {
-
-            float mRotationData = event.values[0];
-//            Log.d("mRotationData", "onSensorChanged: SensorData" + Float.toString(mRotationData));
-        }
-
         if (event.sensor.getType() == Sensor.TYPE_GYROSCOPE) {
 
             float mGyroscopeData = event.values[0];
@@ -88,10 +78,35 @@ public class MainActivity extends WearableActivity implements SensorEventListene
         }
 
         if (mSensorManager.getDefaultSensor(Sensor.TYPE_MAGNETIC_FIELD) != null) {
-            float mMagneticRotationData = event.values[0];
-            Log.d("mMagneticRotationData", "onSensorChanged: SensorData" + Float.toString(mMagneticRotationData));
-//
+             mMagneticRotationData = event.values;
+//            Log.d("mMagneticRotationData", "onSensorChanged: SensorData" + Float.toString(mMagneticRotationData[0]));
         }
+
+        if (event.sensor.getType() == Sensor.TYPE_ACCELEROMETER) {
+            mGravity = event.values;
+        }
+
+        if (mGravity != null && mMagneticRotationVector != null) {
+            float R[] = new float[9];
+            float I[] = new float[9];
+
+            boolean success = SensorManager.getRotationMatrix(R, I, mGravity, mMagneticRotationData);
+            if (success) {
+                float orientation[] = new float[3];
+                SensorManager.getOrientation(R, orientation);
+                float azimut = orientation[0];
+                float pitch = orientation[1];
+                float roll = orientation[2];
+
+                float azimutInDegrees = (float) Math.toDegrees(azimut);
+                if (azimutInDegrees < 0.0f) {
+                    azimutInDegrees += 360.0f;
+                }
+
+                Log.d("data", "onSensorChanged: azimut" + azimutInDegrees);
+            }
+        }
+
     }
 
     @Override
