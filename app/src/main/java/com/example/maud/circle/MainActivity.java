@@ -11,6 +11,7 @@ import android.util.Log;
 import android.widget.TextView;
 
 import java.util.EventListener;
+import java.util.List;
 
 public class MainActivity extends WearableActivity implements SensorEventListener {
 
@@ -21,6 +22,7 @@ public class MainActivity extends WearableActivity implements SensorEventListene
     public Sensor mGyroscope;
     public Sensor mMagnetometer;
     public Sensor mRotation;
+    public Sensor mMagneticRotationVector;
 //    private SensorActivity mSensorActivity;
 //    private EventListener mEvent;
 
@@ -31,9 +33,15 @@ public class MainActivity extends WearableActivity implements SensorEventListene
         setContentView(new MyView(this));
 
         mSensorManager = (SensorManager) getSystemService(SENSOR_SERVICE);
-        mGyroscope = mSensorManager.getDefaultSensor(Sensor.TYPE_GYROSCOPE);
         mMagnetometer = mSensorManager.getDefaultSensor(Sensor.TYPE_MAGNETIC_FIELD);
+        mGyroscope = mSensorManager.getDefaultSensor(Sensor.TYPE_GYROSCOPE);
         mRotation = mSensorManager.getDefaultSensor(Sensor.TYPE_ROTATION_VECTOR);
+        mMagneticRotationVector = mSensorManager.getDefaultSensor(Sensor.TYPE_GEOMAGNETIC_ROTATION_VECTOR);
+
+        List<Sensor> sensors = mSensorManager.getSensorList(Sensor.TYPE_ALL);
+        for (Sensor sensor : sensors) {
+            Log.d("Sensors", "" + sensor.getName());
+        }
 
 //        mSensorActivity = new SensorActivity();
     }
@@ -42,9 +50,13 @@ public class MainActivity extends WearableActivity implements SensorEventListene
     protected void onResume() {
         super.onResume();
         Log.d("onResume", "onResume: onResume");
+        //mMagnetometer doesn't give any data
         mSensorManager.registerListener(this, mMagnetometer, SensorManager.SENSOR_DELAY_NORMAL);
+        //mGyroscope and mRotation both give data
         mSensorManager.registerListener(this, mGyroscope, SensorManager.SENSOR_DELAY_NORMAL);
         mSensorManager.registerListener(this, mRotation, SensorManager.SENSOR_DELAY_NORMAL);
+        mSensorManager.registerListener(this, mMagneticRotationVector, SensorManager.SENSOR_DELAY_NORMAL);
+
     }
 
 
@@ -62,12 +74,23 @@ public class MainActivity extends WearableActivity implements SensorEventListene
     @Override
     //as little action as possible within this function
     public void onSensorChanged(SensorEvent event) {
-        Log.d("sensorChanged", "onSensorChanged: yeah");
         //check first which sensor is getting data
-        if(event.sensor.getType() == Sensor.TYPE_ROTATION_VECTOR){
+        if (event.sensor.getType() == Sensor.TYPE_ROTATION_VECTOR) {
 
-            float mSomething = event.values[0];
-            Log.d("bla", "onSensorChanged: SensorData" + Float.toString(mSomething));
+            float mRotationData = event.values[0];
+//            Log.d("mRotationData", "onSensorChanged: SensorData" + Float.toString(mRotationData));
+        }
+
+        if (event.sensor.getType() == Sensor.TYPE_GYROSCOPE) {
+
+            float mGyroscopeData = event.values[0];
+//            Log.d("mGyroscopeData", "onSensorChanged: SensorData" + Float.toString(mGyroscopeData));
+        }
+
+        if (mSensorManager.getDefaultSensor(Sensor.TYPE_MAGNETIC_FIELD) != null) {
+            float mMagneticRotationData = event.values[0];
+            Log.d("mMagneticRotationData", "onSensorChanged: SensorData" + Float.toString(mMagneticRotationData));
+//
         }
     }
 

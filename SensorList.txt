@@ -1,0 +1,1 @@
+Sensors: STMicro 3-axis Tilt Sensor    MPL Gyroscope    MPL Raw Gyroscope    MPL Accelerometer    MPL Magnetic Field    MPL Raw Magnetic Field    MPL Orientation    MPL Rotation Vector    MPL Game Rotation VectorSensors: MPL Linear Acceleration    MPL Gravity    MPL Significant Motion    MPL Step Detector    MPL Step Counter    MPL Geomagnetic Rotation Vector
