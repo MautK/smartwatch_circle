@@ -1,76 +1,70 @@
 package com.example.maud.circle;
 
+//import android.app.Activity;
 import android.app.Activity;
-import android.content.Context;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
+import android.os.Bundle;
 import android.util.Log;
 
 public class SensorActivity extends Activity implements SensorEventListener {
+    private final SensorManager mSensorManagerActivty;
+    private final Sensor mMagnetometer;
 
-    public SensorManager mSensorManager;
-    private Sensor mGyroscope;
-    private Sensor mMagnetometer;
-    private Sensor mRotation;
-    int compass;
-    float [] rMat = new float[9];
-    float [] orientation = new float[9];
-
-    private double x = 0.0;
-    private double y = 0.0;
-    private double z = 0.0;
+    public SensorActivity(){
+       mSensorManagerActivty = (SensorManager)getSystemService(SENSOR_SERVICE);
+       mMagnetometer = mSensorManagerActivty.getDefaultSensor(Sensor.TYPE_MAGNETIC_FIELD);
+    }
 
     String TAG = "empty";
 
+//    protected void sensorOnResume() {
+//        Log.d(TAG, "setData: yeah");
+//        // these two lines are also specified in MainActivity
+////        mSensorManager.registerListener(this, mMagnetometer, SensorManager.SENSOR_DELAY_NORMAL);
+////        mSensorManager.registerListener(this, mRotation, SensorManager.SENSOR_DELAY_NORMAL);
+//
+//    }
+
+//
+//    protected void sensorPaused() {
+////        mSensorManager.unregisterListener(this);
+//        Log.d(TAG, "onPause: PAUSE");
+//    }
+
+
     @Override
-    protected void onResume(){
+    protected void onResume() {
         super.onResume();
-        int d = Log.d(TAG, "setData: yeah");
-        mSensorManager.registerListener(this, mMagnetometer, SensorManager.SENSOR_DELAY_NORMAL);
-        mSensorManager.registerListener(this, mRotation, SensorManager.SENSOR_DELAY_NORMAL);
-
-
-
+        Log.d(TAG, "onResume: onResume");
+        mSensorManagerActivty.registerListener(this, mMagnetometer, SensorManager.SENSOR_DELAY_NORMAL);
     }
+
 
     @Override
     protected void onPause(){
         super.onPause();
-        mSensorManager.unregisterListener(this);
-    }
-
-    //as little action as possible within this function
-    @Override
-    public void onSensorChanged(SensorEvent event) {
-        Log.d(TAG, "onSensorChanged: yeah");
-        //check first which sensor is getting data
-        if(event.sensor.getType() == Sensor.TYPE_GYROSCOPE){
-            //store data in matrix
-            SensorManager.getRotationMatrixFromVector(rMat, event.values);
-            // some math calculations from this video
-            // https://www.youtube.com/watch?v=nOQxq2YpEjQ
-            compass = (int) (Math.toDegrees(SensorManager.getOrientation(rMat, orientation)[0]+360)%360);
-            //display data
-            SensorData newSensorData = new SensorData();
-            newSensorData.setData(event.values[0], event.values[1], event.values[2]);
-        }
+        Log.d(TAG, "onPause: onPause");
+        mSensorManagerActivty.unregisterListener(this);
     }
 
     @Override
     public void onAccuracyChanged(Sensor sensor, int accuracy) {
-        // more on the gyroscope, not sure if we can use this since it reports the rate of orientation but not according to where the north is
-        // https://developer.android.com/guide/topics/sensors/sensors_motion
     }
 
-    void setData(float newX, float newY, float newZ){
-        x = newX;
-        y = newY;
-        z = newZ;
+    @Override
+    //as little action as possible within this function
+    public void onSensorChanged(SensorEvent event) {
+        Log.d(TAG, "onSensorChanged: yeah");
+        //check first which sensor is getting data
+        if(event.sensor.getType() == Sensor.TYPE_ROTATION_VECTOR){
+
+            float mSomething = event.values[0];
+            Log.d(TAG, "onSensorChanged: SensorData" + Float.toString(mSomething));
+        }
     }
-    
-    void logSomething(){
-        Log.d(TAG, "logSomething: hello");
-    }
+
+
 }
