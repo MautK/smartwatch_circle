@@ -16,9 +16,6 @@ import java.util.List;
 
 public class MainActivity extends WearableActivity implements SensorEventListener {
 
-    private TextView mTextView;
-    private MyView mMyView;
-
     public SensorManager mSensorManager;
     public Sensor mGyroscope;
     public Sensor mMagnetometer;
@@ -28,7 +25,6 @@ public class MainActivity extends WearableActivity implements SensorEventListene
 
     public float[] mGravity;
     public float[] mMagneticRotationData;
-    public float azimuthInDegrees;
     private float azimutInDegrees;
 
     @Override
@@ -50,9 +46,7 @@ public class MainActivity extends WearableActivity implements SensorEventListene
     protected void onResume() {
         super.onResume();
         Log.d("onResume", "onResume: onResume");
-        //mMagnetometer doesn't give any data
         mSensorManager.registerListener(this, mMagnetometer, SensorManager.SENSOR_DELAY_NORMAL);
-        //mGyroscope and mRotation both give data
         mSensorManager.registerListener(this, mGyroscope, SensorManager.SENSOR_DELAY_NORMAL);
         mSensorManager.registerListener(this, mRotation, SensorManager.SENSOR_DELAY_NORMAL);
         mSensorManager.registerListener(this, mMagneticRotationVector, SensorManager.SENSOR_DELAY_NORMAL);
@@ -74,15 +68,8 @@ public class MainActivity extends WearableActivity implements SensorEventListene
     @Override
     //as little action as possible within this function
     public void onSensorChanged(SensorEvent event) {
-        if (event.sensor.getType() == Sensor.TYPE_GYROSCOPE) {
-
-            float mGyroscopeData = event.values[0];
-//            Log.d("mGyroscopeData", "onSensorChanged: SensorData" + Float.toString(mGyroscopeData));
-        }
-
         if (mSensorManager.getDefaultSensor(Sensor.TYPE_MAGNETIC_FIELD) != null) {
              mMagneticRotationData = event.values;
-//            Log.d("mMagneticRotationData", "onSensorChanged: SensorData" + Float.toString(mMagneticRotationData[0]));
         }
 
         if (event.sensor.getType() == Sensor.TYPE_ACCELEROMETER) {
@@ -90,36 +77,34 @@ public class MainActivity extends WearableActivity implements SensorEventListene
         }
 
         if (mGravity != null && mMagneticRotationVector != null) {
-            float R[] = new float[9];
-            float I[] = new float[9];
-
-            boolean success = SensorManager.getRotationMatrix(R, I, mGravity, mMagneticRotationData);
-            if (success) {
-                float orientation[] = new float[3];
-                SensorManager.getOrientation(R, orientation);
-                float azimut = orientation[0];
-                float pitch = orientation[1];
-                float roll = orientation[2];
-
-                azimutInDegrees = (float) Math.toDegrees(azimut);
-                if (azimutInDegrees < 0.0f) {
-                    azimutInDegrees += 360.0f;
-                }
-
-                MyView newMyView = new MyView(this);
-                newMyView.draw();
-                newMyView.setDegrees(azimutInDegrees);
-                newMyView.drawCanvas();
-
-
-                //TODO these functions
-                //MyView.setDegrees(azimutInDegrees);
-                //MyView.drawCircle();
-
-                Log.d("data", "onSensorChanged: azimut" + azimutInDegrees);
-            }
+            sensorAction();
         }
+    }
 
+    public void sensorAction() {
+        float R[] = new float[9];
+        float I[] = new float[9];
+
+        boolean success = SensorManager.getRotationMatrix(R, I, mGravity, mMagneticRotationData);
+        if (success) {
+            float orientation[] = new float[3];
+            SensorManager.getOrientation(R, orientation);
+            float azimut = orientation[0];
+            float pitch = orientation[1];
+            float roll = orientation[2];
+
+            azimutInDegrees = (float) Math.toDegrees(azimut);
+            if (azimutInDegrees < 0.0f) {
+                azimutInDegrees += 360.0f;
+            }
+
+            MyView newMyView = new MyView(this);
+            newMyView.draw();
+            newMyView.setDegrees(azimutInDegrees);
+            newMyView.drawCanvas();
+
+            Log.d("data", "onSensorChanged: azimut" + azimutInDegrees);
+        }
     }
 
     @Override
