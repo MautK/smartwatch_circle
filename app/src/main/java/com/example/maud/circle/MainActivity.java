@@ -1,6 +1,7 @@
 package com.example.maud.circle;
 
 import android.content.Context;
+import android.graphics.Canvas;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
@@ -27,6 +28,8 @@ public class MainActivity extends WearableActivity implements SensorEventListene
 
     public float[] mGravity;
     public float[] mMagneticRotationData;
+    public float azimuthInDegrees;
+    private float azimutInDegrees;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -98,10 +101,20 @@ public class MainActivity extends WearableActivity implements SensorEventListene
                 float pitch = orientation[1];
                 float roll = orientation[2];
 
-                float azimutInDegrees = (float) Math.toDegrees(azimut);
+                azimutInDegrees = (float) Math.toDegrees(azimut);
                 if (azimutInDegrees < 0.0f) {
                     azimutInDegrees += 360.0f;
                 }
+
+                MyView newMyView = new MyView(this);
+                newMyView.draw();
+                newMyView.setDegrees(azimutInDegrees);
+                newMyView.drawCanvas();
+
+
+                //TODO these functions
+                //MyView.setDegrees(azimutInDegrees);
+                //MyView.drawCircle();
 
                 Log.d("data", "onSensorChanged: azimut" + azimutInDegrees);
             }

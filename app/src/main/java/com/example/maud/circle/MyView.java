@@ -4,6 +4,7 @@ import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
+import android.util.Log;
 import android.view.View;
 
 import java.util.ArrayList;
@@ -13,6 +14,9 @@ public class MyView extends View
 {
     private Paint paint;
      List<String> pointsFromPhone;
+     public int x,y,rad;
+     public float turnDegrees;
+     public Canvas canvas;
 
     public MyView(Context context)
     {
@@ -20,13 +24,12 @@ public class MyView extends View
         paint = new Paint();
     }
 
-    @Override
-    protected void onDraw(Canvas canvas)
+    protected void draw()
     {
-        int x = 200;
-        int y = 100;
-        int rad = 50;
-
+        canvas = new Canvas();
+        x = canvas.getWidth()/2;
+        y = 0;
+        rad = 20;
 
         paint.setStyle(Paint.Style.FILL);
         canvas.drawColor(Color.DKGRAY);
@@ -35,18 +38,14 @@ public class MyView extends View
         canvas.drawCircle(x, y, rad, paint);
     }
 
-//    void getPoints(){
-//       //read the arraylist with slice
-//        pointsFromPhone new ArrayList<>(10);
-//        String element1X = pointsFromPhone.get(2);
-//
-//    }
-//
-//    getOrientation(){
-//
-//    }
-//
-//    turnPoints(){
-//
-//    }
+    void setDegrees(float newDegrees) {
+        //both newDegrees and turnDegrees are working fine
+        turnDegrees = newDegrees;
+    }
+
+    void drawCanvas() {
+        canvas.save();
+        canvas.rotate(turnDegrees);
+        Log.d("degrees", "drawCanvas: turnDegrees" + turnDegrees);
+    }
 }
