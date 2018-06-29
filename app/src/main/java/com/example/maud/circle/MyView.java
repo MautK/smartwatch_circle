@@ -15,7 +15,7 @@ import java.util.List;
 
 public class MyView extends View
 {
-    Paint paint;
+    Paint paint = new Paint();
     Canvas canvas;
     public int x,y,rad;
     public float turnDegrees;
@@ -23,30 +23,32 @@ public class MyView extends View
     public MyView(Context context)
     {
         super(context);
-        paint = new Paint();
+//        paint = ;
 //        canvas = new Canvas();
+        x = 50;
+        y = 100;
+        rad = 20;
+
+        paint.setStyle(Paint.Style.FILL);
+        paint.setColor(Color.WHITE);
+//        canvas.drawPaint(paint);
+        paint.setColor(Color.parseColor("#CD5C5C"));
 
     }
 
     @Override
     protected void onDraw(Canvas blaCanvas) {
         super.onDraw(blaCanvas);
-        x = 50;
-        y = 100;
-        rad = 20;
         canvas = blaCanvas;
-        paint.setStyle(Paint.Style.FILL);
-        paint.setColor(Color.WHITE);
-        canvas.drawPaint(paint);
-        setDegrees(-0);
-        paint.setColor(Color.parseColor("#CD5C5C"));
+        canvas.rotate(turnDegrees, this.getWidth()/2, this.getHeight()/2);
         canvas.drawCircle(x, y, rad, paint);
+        invalidate();
     }
 
 
     void setDegrees(float newDegrees) {
-        canvas.rotate(newDegrees);
+//        canvas.rotate(newDegrees);
         //both newDegrees and turnDegrees are working fine
-//        turnDegrees = newDegrees;
+        turnDegrees = newDegrees;
     }
 }

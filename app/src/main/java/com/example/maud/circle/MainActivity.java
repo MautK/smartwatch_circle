@@ -27,7 +27,7 @@ public class MainActivity extends WearableActivity implements SensorEventListene
     public float[] mMagneticRotationData;
     private float azimutInDegrees;
 
-//    private MyView circleMyView;
+    private MyView circleMyView;//= new MyView(this.getApplicationContext());
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,7 +36,8 @@ public class MainActivity extends WearableActivity implements SensorEventListene
 //        circleMyView = new MyView(this);
 //        setContentView(circleMyView);
 
-        setContentView(new MyView(this));
+        circleMyView = new MyView(this.getApplicationContext());
+        setContentView(circleMyView);
 
         mSensorManager = (SensorManager) getSystemService(SENSOR_SERVICE);
         mMagnetometer = mSensorManager.getDefaultSensor(Sensor.TYPE_MAGNETIC_FIELD);
@@ -108,6 +109,7 @@ public class MainActivity extends WearableActivity implements SensorEventListene
 //            circleMyView.setDegrees(azimutInDegrees);
 //            circleMyView.drawCircle();
 
+            circleMyView.setDegrees(azimutInDegrees);
             Log.d("data", "onSensorChanged: azimut" + azimutInDegrees);
         }
     }
