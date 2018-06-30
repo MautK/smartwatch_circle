@@ -18,6 +18,7 @@ public class MainActivity extends WearableActivity implements SensorEventListene
 
     public SensorManager mSensorManager;
     public Sensor mGyroscope;
+    public Sensor mGravitySensor;
     public Sensor mMagnetometer;
     public Sensor mRotation;
     public Sensor mMagneticRotationVector;
@@ -41,6 +42,7 @@ public class MainActivity extends WearableActivity implements SensorEventListene
 
         mSensorManager = (SensorManager) getSystemService(SENSOR_SERVICE);
         mMagnetometer = mSensorManager.getDefaultSensor(Sensor.TYPE_MAGNETIC_FIELD);
+        mGravitySensor = mSensorManager.getDefaultSensor(Sensor.TYPE_GRAVITY);
         mGyroscope = mSensorManager.getDefaultSensor(Sensor.TYPE_GYROSCOPE);
         mRotation = mSensorManager.getDefaultSensor(Sensor.TYPE_ROTATION_VECTOR);
         mMagneticRotationVector = mSensorManager.getDefaultSensor(Sensor.TYPE_GEOMAGNETIC_ROTATION_VECTOR);
@@ -53,6 +55,7 @@ public class MainActivity extends WearableActivity implements SensorEventListene
         super.onResume();
         Log.d("onResume", "onResume: onResume");
         mSensorManager.registerListener(this, mMagnetometer, SensorManager.SENSOR_DELAY_NORMAL);
+        mSensorManager.registerListener(this, mGravitySensor, SensorManager.SENSOR_DELAY_NORMAL);
         mSensorManager.registerListener(this, mGyroscope, SensorManager.SENSOR_DELAY_NORMAL);
         mSensorManager.registerListener(this, mRotation, SensorManager.SENSOR_DELAY_NORMAL);
         mSensorManager.registerListener(this, mMagneticRotationVector, SensorManager.SENSOR_DELAY_NORMAL);
@@ -76,10 +79,12 @@ public class MainActivity extends WearableActivity implements SensorEventListene
     public void onSensorChanged(SensorEvent event) {
         if (mSensorManager.getDefaultSensor(Sensor.TYPE_MAGNETIC_FIELD) != null) {
              mMagneticRotationData = event.values;
+            Log.d("data", "onSensorChanged: magnetic field " + " " + mMagneticRotationData[0]);
         }
 
         if (event.sensor.getType() == Sensor.TYPE_ACCELEROMETER) {
             mGravity = event.values;
+            Log.d("data", "onSensorChanged: accelerometer " + " " + mGravity[0]);
         }
 
         if (mGravity != null && mMagneticRotationVector != null) {
