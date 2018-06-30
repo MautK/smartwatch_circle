@@ -28,6 +28,8 @@ public class MainActivity extends WearableActivity implements SensorEventListene
     public float[] mMagneticRotationData;
     private float azimutInDegrees;
 
+    private int mAzimuth = 0;
+
     private MyView circleMyView;//= new MyView(this.getApplicationContext());
 
     @Override
@@ -79,15 +81,13 @@ public class MainActivity extends WearableActivity implements SensorEventListene
     public void onSensorChanged(SensorEvent event) {
         if (mSensorManager.getDefaultSensor(Sensor.TYPE_MAGNETIC_FIELD) != null) {
              mMagneticRotationData = event.values;
-            Log.d("data", "onSensorChanged: magnetic field " + " " + mMagneticRotationData[0]);
         }
 
-        if (event.sensor.getType() == Sensor.TYPE_ACCELEROMETER) {
+        if (event.sensor.getType() == Sensor.TYPE_GRAVITY) {
             mGravity = event.values;
-            Log.d("data", "onSensorChanged: accelerometer " + " " + mGravity[0]);
         }
 
-        if (mGravity != null && mMagneticRotationVector != null) {
+        if (mGravity != null && mMagneticRotationData != null) {
             sensorAction();
         }
     }
@@ -104,6 +104,9 @@ public class MainActivity extends WearableActivity implements SensorEventListene
             float pitch = orientation[1];
             float roll = orientation[2];
 
+            mAzimuth = (int) (Math.toDegrees( SensorManager.getOrientation( R, orientation) [0]) + 360) %360;
+            Log.d("data", "sensorAction: AZi" + " " + mAzimuth);
+
             azimutInDegrees = (float) Math.toDegrees(azimut);
             if (azimutInDegrees < 0.0f) {
                 azimutInDegrees += 360.0f;
@@ -114,8 +117,7 @@ public class MainActivity extends WearableActivity implements SensorEventListene
 //            circleMyView.setDegrees(azimutInDegrees);
 //            circleMyView.drawCircle();
 
-            circleMyView.setDegrees(azimutInDegrees);
-            Log.d("data", "onSensorChanged: azimut" + azimutInDegrees);
+            circleMyView.setDegrees(mAzimuth);
         }
     }
 
