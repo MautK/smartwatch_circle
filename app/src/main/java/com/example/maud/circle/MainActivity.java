@@ -17,11 +17,8 @@ import java.util.List;
 public class MainActivity extends WearableActivity implements SensorEventListener {
 
     public SensorManager mSensorManager;
-    public Sensor mGyroscope;
     public Sensor mGravitySensor;
     public Sensor mMagnetometer;
-    public Sensor mRotation;
-    public Sensor mMagneticRotationVector;
     public Sensor mAccelerometer;
 
     public float[] mGravity;
@@ -35,9 +32,6 @@ public class MainActivity extends WearableActivity implements SensorEventListene
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-//        setContentView(R.layout.activity_main);
-//        circleMyView = new MyView(this);
-//        setContentView(circleMyView);
 
         circleMyView = new MyView(this.getApplicationContext());
         setContentView(circleMyView);
@@ -45,9 +39,6 @@ public class MainActivity extends WearableActivity implements SensorEventListene
         mSensorManager = (SensorManager) getSystemService(SENSOR_SERVICE);
         mMagnetometer = mSensorManager.getDefaultSensor(Sensor.TYPE_MAGNETIC_FIELD);
         mGravitySensor = mSensorManager.getDefaultSensor(Sensor.TYPE_GRAVITY);
-        mGyroscope = mSensorManager.getDefaultSensor(Sensor.TYPE_GYROSCOPE);
-        mRotation = mSensorManager.getDefaultSensor(Sensor.TYPE_ROTATION_VECTOR);
-        mMagneticRotationVector = mSensorManager.getDefaultSensor(Sensor.TYPE_GEOMAGNETIC_ROTATION_VECTOR);
         mAccelerometer = mSensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
 
     }
@@ -58,9 +49,6 @@ public class MainActivity extends WearableActivity implements SensorEventListene
         Log.d("onResume", "onResume: onResume");
         mSensorManager.registerListener(this, mMagnetometer, SensorManager.SENSOR_DELAY_NORMAL);
         mSensorManager.registerListener(this, mGravitySensor, SensorManager.SENSOR_DELAY_NORMAL);
-        mSensorManager.registerListener(this, mGyroscope, SensorManager.SENSOR_DELAY_NORMAL);
-        mSensorManager.registerListener(this, mRotation, SensorManager.SENSOR_DELAY_NORMAL);
-        mSensorManager.registerListener(this, mMagneticRotationVector, SensorManager.SENSOR_DELAY_NORMAL);
         mSensorManager.registerListener(this, mAccelerometer, SensorManager.SENSOR_DELAY_NORMAL);
     }
 
@@ -100,22 +88,9 @@ public class MainActivity extends WearableActivity implements SensorEventListene
         if (success) {
             float orientation[] = new float[3];
             SensorManager.getOrientation(R, orientation);
-            float azimut = orientation[0];
-            float pitch = orientation[1];
-            float roll = orientation[2];
 
             mAzimuth = (int) (Math.toDegrees( SensorManager.getOrientation( R, orientation) [0]) + 360) %360;
             Log.d("data", "sensorAction: AZi" + " " + mAzimuth);
-
-            azimutInDegrees = (float) Math.toDegrees(azimut);
-            if (azimutInDegrees < 0.0f) {
-                azimutInDegrees += 360.0f;
-            }
-
-//            MyView newMyView = new MyView(this);
-//            circleMyView.draw(canvas);
-//            circleMyView.setDegrees(azimutInDegrees);
-//            circleMyView.drawCircle();
 
             circleMyView.setDegrees(mAzimuth);
         }
