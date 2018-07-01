@@ -1,6 +1,9 @@
 package com.example.maud.circle;
 
+import android.content.BroadcastReceiver;
 import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
 import android.graphics.Canvas;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
@@ -10,6 +13,8 @@ import android.os.Bundle;
 import android.support.wearable.activity.WearableActivity;
 import android.util.Log;
 import android.widget.TextView;
+
+import com.google.android.gms.wearable.MessageClient;
 
 import java.util.EventListener;
 import java.util.List;
@@ -28,19 +33,20 @@ public class MainActivity extends WearableActivity implements SensorEventListene
     private int mAzimuth = 0;
 
     private MyView circleMyView;//= new MyView(this.getApplicationContext());
+    public WearableDataListener myWearableDataListener;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         circleMyView = new MyView(this.getApplicationContext());
+        myWearableDataListener = new WearableDataListener();
         setContentView(circleMyView);
 
         mSensorManager = (SensorManager) getSystemService(SENSOR_SERVICE);
         mMagnetometer = mSensorManager.getDefaultSensor(Sensor.TYPE_MAGNETIC_FIELD);
         mGravitySensor = mSensorManager.getDefaultSensor(Sensor.TYPE_GRAVITY);
         mAccelerometer = mSensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
-
     }
 
     @Override
@@ -101,4 +107,7 @@ public class MainActivity extends WearableActivity implements SensorEventListene
         super.onStop();
         Log.d("STOP", "onStop: STOP");
     }
+
 }
+
+
