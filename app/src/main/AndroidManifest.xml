@@ -16,6 +16,14 @@
         <uses-library
             android:name="com.google.android.wearable"
             android:required="true" />
+
+        <service android:name=".WearableDataListener">
+            <intent-filter>
+                <action android:name="com.google.android.gms.wearable.DATA_CHANGED" />
+                <action android:name="com.google.android.gms.wearable.MESSAGE_RECEIVED" />
+                <data android:scheme="wear" android:host="*" android:pathPrefix="/FirstExample" />
+            </intent-filter>
+        </service>
         <!--
                Set to true if your app is Standalone, that is, it does not require the handheld
                app to run.
