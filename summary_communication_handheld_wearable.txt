@@ -1,0 +1,50 @@
+Handheld to Wearable
+
+MessageClient
+
+Wearable Data Layer API
+communication between phone app and Wear app
+-set of data objects the system can send and synchronise 
+-listeners that notofy app of certain events
+DataItem: data storage with automatic syncing between handheld and wearable
+Asset: sending binary blobs of data such as images
+Message (MessageClient): remote procedure calls (RPC) such as controlling a handheld’s media player from the wearable or starting an intent on the wearable from the handheld. Also great for one-way requests or for request/response. 
+WearableListenerService: Extending WearableListenerService lets you listen for important data layer events in a service
+OnDataChangedListener (for foreground activities): only activities in the foreground
+DataMap: 
+
+DataLayer working with WearableListenerService to produce and consume DataEvents and effectively work with the DataLayer
+Communication between handheld and Wear device using DataAPI.
+An activity is used for both the connected devices
+Implementations for various required listeners when using DataPi, MessageApi and NodeApi.
+
+Handheld datasender
+wearable data listener
+
+Wearable.DataPi
+
+HANDHELD
+PutDataMapRequest 
+(.getDataMap)
+DataMap 
+(as.PutDataRequest)
+PutDataRequest
+Wearable.DataApi
+(putDataItem)
+Data Layer
+
+Bluetooth connection
+
+WEARABLE
+WearableListenerService
+(on.DataChanged)
+DataEventBuffer
+(.getDataItem)
+DataItem
+(DataMapItem.fromDataItem)
+DataMapItem
+(.getDataMap)
+DataMap
+
+
+
